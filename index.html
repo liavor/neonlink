@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Link | Gamers WalkieTalkie </title>
+    <title>Neon Link | Gamer Cyberpunk</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;600;700&display=swap');
@@ -166,7 +166,6 @@
             <div class="absolute -top-20 -right-20 w-40 h-40 bg-[#00f3ff] rounded-full mix-blend-screen filter blur-[80px] opacity-40"></div>
             <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-[#b026ff] rounded-full mix-blend-screen filter blur-[80px] opacity-30"></div>
 
-            <!-- LOGO DÜZELTİLDİ: NEON ve LINK ayrı ayrı stillendirildi -->
             <h1 class="cyber-font text-5xl mb-2 tracking-widest text-center relative z-10">
                 <span class="gamer-gradient-text">NEON</span><span class="text-[#ff0055] drop-shadow-[0_0_8px_rgba(255,0,85,0.8)]">LINK</span>
             </h1>
@@ -207,9 +206,17 @@
                 </div>
             </div>
             <div class="flex gap-4">
+                
                 <!-- Davet Linki Kopyalama Butonu -->
                 <button id="share-btn" title="Davet Linkini Kopyala" class="w-14 h-14 flex items-center justify-center rounded-xl bg-[#05010a] hover:bg-[#b026ff]/20 border-2 border-[#b026ff]/50 transition-all text-[#b026ff] shadow-[0_0_10px_rgba(176,38,255,0.2)] relative z-10">
                     <span id="share-icon" class="text-2xl">🔗</span>
+                </button>
+
+                <!-- YENİ: Dipses (Gürültü Engelleme) Filtresi -->
+                <button id="noise-filter-btn" title="Dipses Filtresi (Açık)" class="w-14 h-14 flex items-center justify-center rounded-xl bg-[#05010a] hover:bg-[#00f3ff]/20 border-2 border-[#00f3ff]/50 transition-all text-[#00f3ff] shadow-[0_0_10px_rgba(0,243,255,0.2)] relative z-10 group">
+                    <span class="text-2xl group-hover:animate-pulse">🌊</span>
+                    <!-- Açık olduğunu belli eden minik mavi bildirim ışığı -->
+                    <div id="noise-indicator" class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-[#00f3ff] rounded-full shadow-[0_0_8px_#00f3ff] border border-[#05010a]"></div>
                 </button>
 
                 <button id="mute-btn" title="Mikrofonu Kapat/Aç" class="w-14 h-14 flex items-center justify-center rounded-xl bg-[#05010a] hover:bg-[#00f3ff]/20 border-2 border-[#00f3ff]/50 transition-all text-[#00f3ff] shadow-[0_0_10px_rgba(0,243,255,0.2)] relative z-10">
@@ -234,7 +241,7 @@
             <!-- Sağ Alan Wrapper -->
             <div class="flex-1 flex flex-col overflow-hidden relative bg-[#05010a]/40">
                 
-                <!-- Sesli Sohbet Izgarası (CRT Altında Kalır) -->
+                <!-- Sesli Sohbet Izgarası -->
                 <div class="flex-1 p-6 overflow-y-auto relative glass-panel border-b-0 rounded-b-none">
                     <div id="voice-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
                         <!-- Ses Kutuları -->
@@ -245,11 +252,12 @@
                     </div>
                 </div>
 
-                <!-- Yazılı Sohbet Alanı (z-[60] ile CRT Efektinin ÜSTÜNE çıkarıldı. Tertemiz okunur!) -->
+                <!-- Yazılı Sohbet Alanı -->
                 <div class="h-64 bg-[#05010a] border-t-2 border-[#00f3ff]/40 flex flex-col relative z-[60] shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
                     
                     <div id="chat-messages" class="flex-1 p-5 overflow-y-auto flex flex-col gap-4 font-mono text-sm z-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMCwgMjQzLCAyNTUsIDAuMDUpIi8+PC9zdmc+')]">
                         <div class="text-[#b026ff] text-sm font-bold opacity-90 mb-2 font-mono uppercase tracking-wider drop-shadow-[0_0_5px_rgba(176,38,255,0.4)]">> SİSTEM: Odaya giriş yapıldı. Güvenli bağlantı aktif.</div>
+                        <div class="text-[#00f3ff] text-sm font-bold opacity-90 mb-2 font-mono uppercase tracking-wider drop-shadow-[0_0_5px_rgba(0,243,255,0.4)]">> SİSTEM: Donanımsal gürültü filtresi (dipses) standart olarak aktif. Sesiniz temizleniyor...</div>
                     </div>
                     
                     <div class="p-4 bg-[#080210] border-t border-[#ff0055]/30 flex gap-3 items-center z-10">
@@ -270,13 +278,11 @@
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 
     <script>
-        // --- URL'DEN ODA ADINI OTOMATİK ÇEKME (LINK İLE GELENLER İÇİN) ---
+        // --- URL'DEN ODA ADINI OTOMATİK ÇEKME ---
         window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const roomFromUrl = urlParams.get('room');
-            
             if (roomFromUrl) {
-                // Eğer linkte oda parametresi varsa, odayı otomatik doldur ve İsim kutusunu seçtir
                 document.getElementById('room-input').value = roomFromUrl;
                 document.getElementById('nick-input').focus();
             }
@@ -292,6 +298,7 @@
 
         let roomClients = []; 
         let isMuted = false;
+        let isNoiseFilterActive = true; // YENİ: Dipses filtresi durumu
 
         // UI Elementleri
         const loginScreen = document.getElementById('login-screen');
@@ -302,11 +309,13 @@
         const emptyState = document.getElementById('empty-state');
         const muteBtn = document.getElementById('mute-btn');
         const shareBtn = document.getElementById('share-btn');
+        const noiseFilterBtn = document.getElementById('noise-filter-btn'); // YENİ
+        const noiseIndicator = document.getElementById('noise-indicator'); // YENİ
         const chatInput = document.getElementById('chat-input');
         const chatSendBtn = document.getElementById('chat-send-btn');
         const chatMessages = document.getElementById('chat-messages');
 
-        // GİRİŞ İŞLEMİ
+        // GİRİŞ İŞLEMİ VE MİKROFON İZİNLERİ
         joinBtn.onclick = async () => {
             myNick = document.getElementById('nick-input').value.trim();
             const roomInput = document.getElementById('room-input').value.trim();
@@ -319,7 +328,15 @@
             roomName = 'neon-net-' + roomInput.toLowerCase().replace(/\s+/g, '-');
 
             try {
-                myStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+                // YENİ: constraints kısmı güncellendi. Artık donanımsal dipses/yankı engelleme tam güçle devrede.
+                myStream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: {
+                        noiseSuppression: true,
+                        echoCancellation: true,
+                        autoGainControl: true
+                    }, 
+                    video: false 
+                });
                 initPeerAsHost();
             } catch (err) {
                 alert("SİSTEM HATASI: Mikrofona erişilemedi!");
@@ -527,7 +544,6 @@
             chatScreen.classList.remove('hidden');
             document.getElementById('display-nick').innerText = myNick.toUpperCase() + (isHost ? " [KURUCU]" : "");
             
-            // Gerçek oda adını UI'da gösteriyoruz
             const rawRoomInput = document.getElementById('room-input').value.trim();
             document.getElementById('display-room').innerText = `ODA: ${rawRoomInput.toUpperCase()}`;
             
@@ -547,7 +563,6 @@
                 <div class="text-5xl text-[#ff0055] group-hover:text-[#b026ff] transition-colors drop-shadow-[0_0_10px_rgba(255,0,85,0.8)] group-hover:drop-shadow-[0_0_15px_rgba(176,38,255,0.8)]">🎧</div>
                 <div class="cyber-font text-[12px] text-white tracking-widest text-center z-10 font-bold">${nick}</div>
                 
-                <!-- Animasyonlu RGB Ekolayzer -->
                 <div class="flex gap-1.5 items-end h-5 mt-2">
                     <div class="w-1.5 bg-[#00f3ff] rounded-t-sm animate-pulse shadow-[0_0_5px_#00f3ff]" style="height: 40%"></div>
                     <div class="w-1.5 bg-[#b026ff] rounded-t-sm animate-pulse shadow-[0_0_5px_#b026ff]" style="height: 100%; animation-delay: 0.2s"></div>
@@ -584,11 +599,9 @@
         // Davet Linkini Kopyalama Kontrolü
         shareBtn.onclick = () => {
             const rawRoom = document.getElementById('room-input').value.trim();
-            // Nerede host ediliyorsa onun linkini alır ve ?room= parametresi ekler.
             const baseUrl = window.location.origin + window.location.pathname;
             const inviteLink = `${baseUrl}?room=${encodeURIComponent(rawRoom)}`;
             
-            // Güvenli kopyalama (iframe ve mobil dostu)
             const tempInput = document.createElement('input');
             tempInput.value = inviteLink;
             document.body.appendChild(tempInput);
@@ -596,17 +609,51 @@
             document.execCommand('copy');
             document.body.removeChild(tempInput);
 
-            // Görsel geri bildirim
             const icon = document.getElementById('share-icon');
             icon.innerText = '✅';
             systemMessage("SİSTEM: Davet linki panoya kopyalandı! Arkadaşlarına gönderebilirsin.");
             
-            setTimeout(() => {
-                icon.innerText = '🔗';
-            }, 3000);
+            setTimeout(() => { icon.innerText = '🔗'; }, 3000);
         };
 
-        // Mikrofon Kontrolü
+        // YENİ: Dipses (Gürültü Engelleme) Filtresi Kontrolü
+        noiseFilterBtn.onclick = async () => {
+            if (!myStream) return;
+            
+            isNoiseFilterActive = !isNoiseFilterActive;
+            const track = myStream.getAudioTracks()[0];
+            
+            try {
+                // Tarayıcıya filtreleri canlı canlı kapatıp açmasını söylüyoruz
+                await track.applyConstraints({
+                    noiseSuppression: isNoiseFilterActive,
+                    echoCancellation: isNoiseFilterActive,
+                    autoGainControl: isNoiseFilterActive
+                });
+                
+                if (isNoiseFilterActive) {
+                    noiseFilterBtn.classList.replace('border-red-500/80', 'border-[#00f3ff]/50');
+                    noiseFilterBtn.classList.replace('text-red-500', 'text-[#00f3ff]');
+                    noiseFilterBtn.classList.replace('hover:bg-red-500/20', 'hover:bg-[#00f3ff]/20');
+                    noiseFilterBtn.classList.replace('shadow-[0_0_10px_rgba(239,68,68,0.4)]', 'shadow-[0_0_10px_rgba(0,243,255,0.2)]');
+                    noiseIndicator.classList.remove('hidden');
+                    noiseFilterBtn.title = "Dipses Filtresi (Açık)";
+                    systemMessage("SİSTEM: Dipses filtresi AKTİF. Arka plan gürültüsü engelleniyor.");
+                } else {
+                    noiseFilterBtn.classList.replace('border-[#00f3ff]/50', 'border-red-500/80');
+                    noiseFilterBtn.classList.replace('text-[#00f3ff]', 'text-red-500');
+                    noiseFilterBtn.classList.replace('hover:bg-[#00f3ff]/20', 'hover:bg-red-500/20');
+                    noiseFilterBtn.classList.replace('shadow-[0_0_10px_rgba(0,243,255,0.2)]', 'shadow-[0_0_10px_rgba(239,68,68,0.4)]');
+                    noiseIndicator.classList.add('hidden');
+                    noiseFilterBtn.title = "Dipses Filtresi (Kapalı)";
+                    systemMessage("SİSTEM: Dipses filtresi KAPATILDI. Mikrofon ham (raw) ses alıyor.");
+                }
+            } catch (e) {
+                systemMessage("HATA: Filtre durumu değiştirilemedi. Tarayıcınız bunu canlı olarak desteklemiyor olabilir.");
+            }
+        };
+
+        // Mikrofon Kontrolü (Susturma)
         muteBtn.onclick = () => {
             isMuted = !isMuted;
             myStream.getAudioTracks()[0].enabled = !isMuted;
